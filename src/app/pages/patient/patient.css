@@ -1,0 +1,15 @@
+*{
+    margin-top: 10px;
+    margin-left: 20px;
+}
+h1{
+    color: blue;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 25pt;
+}
+
+ul li {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgb(8, 71, 29);
+    font-size: 14pt;
+}

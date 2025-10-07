@@ -1,0 +1,6 @@
+<h1>Lista de pacientes registrados</h1>
+<ul>
+    @for (p of patients; track $index){
+        <li> {{ p.firstName}} {{ p.lastName}}</li>
+    }
+</ul>
