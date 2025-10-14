@@ -1,11 +1,9 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { PatientComponent } from './pages/patient/patient';
-import { MedicComponent } from './pages/medic/medic';
+import { LayoutComponent } from './pages/layout-component/layout-component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, PatientComponent, MedicComponent],
+  imports: [LayoutComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

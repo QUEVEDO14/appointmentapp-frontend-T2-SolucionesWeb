@@ -5,8 +5,8 @@ import { MedicService } from '../../services/medic-service';
 @Component({
   selector: 'app-medic',
   imports: [],
-  templateUrl: './medic.html',
-  styleUrl: './medic.css'
+  templateUrl: './medic-component.html',
+  styleUrl: './medic-component.css'
 })
 export class MedicComponent {
   medics: Medic[];
