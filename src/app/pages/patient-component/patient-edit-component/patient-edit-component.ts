@@ -17,24 +17,23 @@ import { switchMap } from 'rxjs';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    RouterLink
-],
+    RouterLink,
+  ],
   templateUrl: './patient-edit-component.html',
-  styleUrl: './patient-edit-component.css'
+  styleUrl: './patient-edit-component.css',
 })
-
 export class PatientEditComponent {
   form: FormGroup;
   id: number;
   isEdit: boolean;
 
   constructor(
-    private route: ActivatedRoute,
+    private route: ActivatedRoute, // Conocer el parametro que viene por la url
     private patientService: PatientService,
-    private router: Router // dirigirnos de un componente a otro
-  ){}
+    private router: Router // Dirigirnos de un componente a otro
+  ) {}
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.form = new FormGroup({
       idPatient: new FormControl(),
       dni: new FormControl(''),
@@ -42,7 +41,7 @@ export class PatientEditComponent {
       lastName: new FormControl(''),
       phone: new FormControl(''),
       email: new FormControl(''),
-      address: new FormControl('')
+      address: new FormControl(''),
     });
 
     this.route.params.subscribe((data) => {
@@ -50,7 +49,6 @@ export class PatientEditComponent {
       this.isEdit = data['id'] != null;
       this.initForm();
     });
-
   }
 
   initForm() {
@@ -58,22 +56,20 @@ export class PatientEditComponent {
       this.patientService.findById(this.id).subscribe((data) => {
         this.form = new FormGroup({
           idPatient: new FormControl(data.idPatient),
+          dni: new FormControl(data.dni),
           firstName: new FormControl(data.firstName),
           lastName: new FormControl(data.lastName),
-          dni: new FormControl(data.dni),
-          address: new FormControl(data.address),
           phone: new FormControl(data.phone),
           email: new FormControl(data.email),
+          address: new FormControl(data.address),
         });
       });
     }
   }
 
-  persist(){
+  persist() {
     const patient: Patient = new Patient();
     patient.idPatient = this.form.value['idPatient'];
-     // const x = this.form.controls['idPatient'].value;
-    // const y = this.form.get['idPatient'].value;
     patient.dni = this.form.value['dni'];
     patient.firstName = this.form.value['firstName'];
     patient.lastName = this.form.value['lastName'];
@@ -81,29 +77,28 @@ export class PatientEditComponent {
     patient.email = this.form.value['email'];
     patient.address = this.form.value['address'];
 
-    //this.patientService.save(patient).subscribe();
     if(this.isEdit){
-      // EDIT
+      // UPDATE
       // this.patientService.update(this.id, patient).subscribe();
-      //PRACTICA COMUN, NO IDEAL
-      this.patientService.update(this.id, patient).subscribe( () => {
-        this.patientService.findAll().subscribe(data => {
+      // PRACTICA COMUN, NO IDEAL
+      this.patientService.update(this.id, patient).subscribe(() => {
+        this.patientService.findAll().subscribe( data => {
           this.patientService.setPatientChange(data);
-          this.patientService.setMessageChange('UPDATED!');
-        });
+          this.patientService.setMessageChange('PATIENT UPDATED!');
+        })
       });
-    } else{
+    }else{
       // SAVE
-      // this.patientService.save(patient).subscribe();
-      //PRACTICA IDEAL
+      //this.patientService.save(patient).subscribe();
+      // PRACTICA IDEAL
       this.patientService.save(patient)
-        .pipe(switchMap( ()=> this.patientService.findAll() ))
-        .subscribe(data => {
+        .pipe(switchMap( () => this.patientService.findAll()))
+        .subscribe( data => {
           this.patientService.setPatientChange(data);
-          this.patientService.setMessageChange('CREATED!');
+          this.patientService.setMessageChange('PATIENT CREATED!');
         });
     }
 
-    this.router.navigate['pages/patient'];
+    this.router.navigate(['pages/patient']);
   }
 }
