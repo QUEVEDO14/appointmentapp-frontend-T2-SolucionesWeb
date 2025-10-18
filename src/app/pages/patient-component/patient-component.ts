@@ -26,7 +26,7 @@ import { switchMap } from 'rxjs';
     RouterLink,
   ],
   templateUrl: './patient-component.html',
-  styleUrl: './patient-component.css'
+  styleUrl: './patient-component.css',
 })
 export class PatientComponent {
   // patients: Patient[];
@@ -40,7 +40,7 @@ export class PatientComponent {
     { def: 'phone', label: 'phone', hide: false },
     { def: 'email', label: 'email', hide: false },
     { def: 'address', label: 'address', hide: false },
-    { def: 'actions', label: 'actions', hide: false }
+    { def: 'actions', label: 'actions', hide: false },
   ];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -49,24 +49,26 @@ export class PatientComponent {
   constructor(
     private patientService: PatientService,
     private _snackBar: MatSnackBar
-  ) { }
-  //private patientService = inject(PatientService);
-
+  ) {}
 
   ngOnInit(): void {
     // this.patientService.findAll().subscribe(data => console.log(data));
     // this.patientService.findAll().subscribe(data => this.patients = data);
 
-    /*this.patientService.findAll().subscribe(data => {
+    /*this.patientService.findAll().subscribe((data) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-    });
-    */
+    });*/
     this.patientService.findAll().subscribe(data => this.createTable(data));
     this.patientService.getPatientChange().subscribe(data => this.createTable(data));
-    this.patientService.getMessageChange().subscribe(data => this._snackBar.open(data, 'INFO', { duration: 2000, horizontalPosition: 'right', verticalPosition: 'bottom' }));
-
+    this.patientService.getMessageChange().subscribe(data => 
+      this._snackBar.open(data, 'INFO', { 
+        duration: 2000, 
+        horizontalPosition: 'right', 
+        verticalPosition:'bottom'
+      })
+    );
   }
 
   createTable(data: Patient[]) {
@@ -85,10 +87,10 @@ export class PatientComponent {
 
   delete(id: number){
     this.patientService.delete(id)
-      .pipe(switchMap( () => this.patientService.findAll() ))
-      .subscribe(data => {
-        this.patientService.setPatientChange(data);
-        this.patientService.setMessageChange('DELETED!');
-      });
+    .pipe(switchMap(()=>this.patientService.findAll()))
+    .subscribe( data => {
+      this.patientService.setPatientChange(data);
+      this.patientService.setMessageChange('PATIENT DELETED!');
+    });
   }
 }

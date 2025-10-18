@@ -15,7 +15,7 @@ export class PatientService {
 
   constructor (private http: HttpClient){}
 
-  private url: string =  `${environment.HOST}/patients`;
+  private url: string =  `${environment.HOST}/patients`; 
   private patientChange: Subject<Patient[]> = new Subject<Patient[]>;
   private messageChange: Subject<string> = new Subject<string>;
 
@@ -40,7 +40,7 @@ export class PatientService {
     return this.http.delete(`${this.url}/${id}`);
   }
 
-  ///////////////
+  ////////////////////
   setPatientChange(data: Patient[]){
     this.patientChange.next(data);
   }
