@@ -4,9 +4,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Patient } from '../../../model/patient';
 import { PatientService } from '../../../services/patient-service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-patient-edit-component',
@@ -24,8 +25,14 @@ import { PatientService } from '../../../services/patient-service';
 
 export class PatientEditComponent {
   form: FormGroup;
+  id: number;
+  isEdit: boolean;
 
-  constructor(private patientService: PatientService){}
+  constructor(
+    private route: ActivatedRoute,
+    private patientService: PatientService,
+    private router: Router // dirigirnos de un componente a otro
+  ){}
 
   ngOnInit(): void{
     this.form = new FormGroup({
@@ -37,11 +44,36 @@ export class PatientEditComponent {
       email: new FormControl(''),
       address: new FormControl('')
     });
+
+    this.route.params.subscribe((data) => {
+      this.id = data['id'];
+      this.isEdit = data['id'] != null;
+      this.initForm();
+    });
+
+  }
+
+  initForm() {
+    if (this.isEdit) {
+      this.patientService.findById(this.id).subscribe((data) => {
+        this.form = new FormGroup({
+          idPatient: new FormControl(data.idPatient),
+          firstName: new FormControl(data.firstName),
+          lastName: new FormControl(data.lastName),
+          dni: new FormControl(data.dni),
+          address: new FormControl(data.address),
+          phone: new FormControl(data.phone),
+          email: new FormControl(data.email),
+        });
+      });
+    }
   }
 
   persist(){
     const patient: Patient = new Patient();
     patient.idPatient = this.form.value['idPatient'];
+     // const x = this.form.controls['idPatient'].value;
+    // const y = this.form.get['idPatient'].value;
     patient.dni = this.form.value['dni'];
     patient.firstName = this.form.value['firstName'];
     patient.lastName = this.form.value['lastName'];
@@ -49,6 +81,29 @@ export class PatientEditComponent {
     patient.email = this.form.value['email'];
     patient.address = this.form.value['address'];
 
-    this.patientService.save(patient).subscribe();
+    //this.patientService.save(patient).subscribe();
+    if(this.isEdit){
+      // EDIT
+      // this.patientService.update(this.id, patient).subscribe();
+      //PRACTICA COMUN, NO IDEAL
+      this.patientService.update(this.id, patient).subscribe( () => {
+        this.patientService.findAll().subscribe(data => {
+          this.patientService.setPatientChange(data);
+          this.patientService.setMessageChange('UPDATED!');
+        });
+      });
+    } else{
+      // SAVE
+      // this.patientService.save(patient).subscribe();
+      //PRACTICA IDEAL
+      this.patientService.save(patient)
+        .pipe(switchMap( ()=> this.patientService.findAll() ))
+        .subscribe(data => {
+          this.patientService.setPatientChange(data);
+          this.patientService.setMessageChange('CREATED!');
+        });
+    }
+
+    this.router.navigate['pages/patient'];
   }
 }
