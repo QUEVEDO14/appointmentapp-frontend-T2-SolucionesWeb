@@ -1,0 +1,33 @@
+/* product-edit.component.css */
+.product-form {
+    max-width: 800px;
+    margin: auto;
+}
+
+.grid {
+    display: grid;
+}
+
+.flex {
+    display: flex;
+}
+
+.gap-3 {
+    gap: 1rem;
+}
+
+.mt-5 {
+    margin-top: 1.5rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}

@@ -1,10 +1,16 @@
+import { Category } from './category';
+import { Family } from './family';
+import { Laboratory } from './laboratory';
+
 export class Product {
-  id?: number;
-  name: string;
-  description?: string;
-  price: number;
-  stock: number;
-  categoryId: number;
-  familyId: number;
-  laboratoryId: number;
+  idProduct!: number;
+  nameProduct!: string;
+  descriptionProduct!: string;
+  presentationProduct?: string;
+  unitPriceProduct!: number;
+  stockProduct!: number;
+  expiredProduct?: string; // ISO date
+  category!: Category;
+  family!: Family;
+  laboratory!: Laboratory;
 }

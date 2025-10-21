@@ -1,0 +1,66 @@
+<mat-form-field appearance="outline" class="w-full mb-3">
+    <mat-label>Buscar producto</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Paracetamol" #input />
+    <mat-icon matSuffix>search</mat-icon>
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort class="w-full">
+
+        <ng-container matColumnDef="idProduct">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <td mat-cell *matCellDef="let row">{{ row.idProduct }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="nameProduct">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+            <td mat-cell *matCellDef="let row">{{ row.nameProduct }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="unitPriceProduct">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Precio (S/)</th>
+            <td mat-cell *matCellDef="let row">{{ row.unitPriceProduct | number: '1.2-2' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="stockProduct">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock</th>
+            <td mat-cell *matCellDef="let row">{{ row.stockProduct }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoría</th>
+            <td mat-cell *matCellDef="let row">{{ row.category?.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="family">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Familia</th>
+            <td mat-cell *matCellDef="let row">{{ row.family?.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="laboratory">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Laboratorio</th>
+            <td mat-cell *matCellDef="let row">{{ row.laboratory?.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let row">
+                <button mat-icon-button color="primary" [routerLink]="['/products/edit', row.idProduct]">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="delete(row.idProduct)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of products"></mat-paginator>
+
+<button mat-fab color="primary" class="fab-button" routerLink="/products/new">
+    <mat-icon>add</mat-icon>
+</button>

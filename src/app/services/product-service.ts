@@ -10,11 +10,10 @@ import { Product } from '../model/product.model';
 export class ProductService {
 
   private url: string = `${environment.HOST}/products`;
-  private productChange: Subject<Product[]> = new Subject<Product[]>();
-  private messageChange: Subject<string> = new Subject<string>();
+  private productChange = new Subject<Product[]>();
+  private messageChange = new Subject<string>();
 
   constructor(private http: HttpClient) {}
-
 
   findAll() {
     return this.http.get<Product[]>(this.url);
