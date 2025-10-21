@@ -1,0 +1,65 @@
+<h2 class="text-xl font-semibold mb-4">
+    {{ isEdit ? 'Editar Producto' : 'Nuevo Producto' }}
+</h2>
+
+<form [formGroup]="form" (ngSubmit)="persist()" class="product-form">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nameProduct" required />
+            <mat-error *ngIf="form.get('nameProduct')?.invalid">Nombre obligatorio (min 3)</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Precio</mat-label>
+            <input matInput type="number" formControlName="unitPriceProduct" required />
+            <mat-error *ngIf="form.get('unitPriceProduct')?.invalid">Precio inválido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Stock</mat-label>
+            <input matInput type="number" formControlName="stockProduct" required />
+            <mat-error *ngIf="form.get('stockProduct')?.invalid">Stock inválido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Categoría</mat-label>
+            <mat-select formControlName="category">
+                <mat-option *ngFor="let cat of categories" [value]="cat">
+                    {{ cat.nameCategory }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Familia</mat-label>
+            <mat-select formControlName="family">
+                <mat-option *ngFor="let fam of families" [value]="fam">
+                    {{ fam.nameFamily }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Laboratorio</mat-label>
+            <mat-select formControlName="laboratory">
+                <mat-option *ngFor="let lab of laboratories" [value]="lab">
+                    {{ lab.nameLaboratory }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+    </div>
+
+    <div class="flex gap-3 mt-5">
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+            {{ isEdit ? 'Actualizar' : 'Guardar' }}
+        </button>
+
+        <button mat-raised-button color="warn" routerLink="/products">
+            Cancelar
+        </button>
+    </div>
+</form>
